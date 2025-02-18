@@ -4,6 +4,9 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 async function bootstrap() {
   const isDev = process.env.NODE_ENV === 'dev';
@@ -11,6 +14,7 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter({ logger: isDev }),
   );
+  app.enableCors();
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
