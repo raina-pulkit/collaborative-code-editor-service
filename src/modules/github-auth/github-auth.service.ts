@@ -124,6 +124,8 @@ export class GithubAuthService {
       gender: '',
     };
 
+    // TODO: Add Postgres DB and save user details in your own DB
+
     return userDetailsReturn;
   };
 
