@@ -1,6 +1,6 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { GithubAuthService } from './github-auth.service';
-import { parameterValidator } from 'src/config/validator';
+import { parameterValidator } from 'config/validator';
 
 @Controller()
 export class GithubAuthController {

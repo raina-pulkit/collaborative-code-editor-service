@@ -4,9 +4,9 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import * as dotenv from 'dotenv';
+import { configDotenv } from 'dotenv';
 
-dotenv.config();
+configDotenv();
 
 async function bootstrap() {
   const isDev = process.env.NODE_ENV === 'dev';

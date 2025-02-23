@@ -11,7 +11,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserDetails } from 'src/types/user/user-details';
+import { UserDetails } from 'types/user/user-details';
 
 @Controller('v1/user')
 export class UserController {

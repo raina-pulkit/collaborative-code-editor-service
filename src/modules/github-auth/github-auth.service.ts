@@ -4,9 +4,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Method } from 'axios';
-import { RequestService } from 'src/modules/request/request.service';
-import { UserDetails } from 'src/types/user/user-details';
 import * as jwt from 'jsonwebtoken';
+import { RequestService } from 'modules/request/request.service';
+import { UserDetails } from 'types/user/user-details';
 
 interface GithubAccessTokenResponse {
   access_token?: string;
