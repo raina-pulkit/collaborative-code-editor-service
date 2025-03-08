@@ -1,25 +1,29 @@
 global.__rootdir__ = __dirname || process.cwd();
 
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { configDotenv } from 'dotenv';
-import { ConfigService } from '@nestjs/config';
-import { parameterValidator } from 'config/validator';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { parameterValidator } from 'config/validator';
+import { configDotenv } from 'dotenv';
+import { writeFileSync } from 'fs';
+import { AppModule } from './app.module';
 
 configDotenv();
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const isDev = process.env.NODE_ENV === 'dev';
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({ logger: isDev }),
   );
 
+  const configService = app.get<ConfigService>(ConfigService);
+
+  app.enableShutdownHooks();
   app.useGlobalPipes(parameterValidator());
 
   const options = new DocumentBuilder()
@@ -30,11 +34,15 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
+  writeFileSync('./swagger.json', JSON.stringify(document));
   SwaggerModule.setup('api', app, document);
 
   app.enableCors();
   await app.init();
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(
+    configService.get<number>('PORT', { infer: true }) ?? 3000,
+    '0.0.0.0',
+  );
 }
 
-bootstrap();
+void bootstrap();

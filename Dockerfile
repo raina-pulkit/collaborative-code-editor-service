@@ -28,7 +28,7 @@ EXPOSE $PORT
 
 CMD ["/bin/sh", "-c", "node dist/main"]
 
-FROM node:20.6.0-alpine AS production
+FROM node:23-alpine3.20 AS production
 
 WORKDIR /usr/src/app
 ARG GITHUB_ACCESS_TOKEN

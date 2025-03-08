@@ -1,8 +1,10 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
-import { GithubAuthService } from './github-auth.service';
+import { ApiExcludeController } from '@nestjs/swagger';
 import { parameterValidator } from 'config/validator';
+import { GithubAuthService } from './github-auth.service';
 
 @Controller()
+@ApiExcludeController()
 export class GithubAuthController {
   constructor(private readonly githubAuthService: GithubAuthService) {}
 

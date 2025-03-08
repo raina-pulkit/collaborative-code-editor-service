@@ -49,7 +49,8 @@ export class GithubAuthService {
     const jwtSecret = process.env.JWT_SECRET;
     const jwtToken = jwt.sign(dataToReturn, jwtSecret, {
       expiresIn: '1hr',
-      algorithm: 'HS256',
+      algorithm: 'RS256',
+      issuer: 'PulkitRaina',
     });
 
     return { data: jwtToken };

@@ -26,3 +26,10 @@ restart:
 
 generate-jwt:
 	ts-node bin/create-valid-jwt.ts
+
+generate-api-spec:
+	curl -s http://localhost:3030/api-json | jq . > swagger.json
+
+clean-db:
+	docker container stop collaborative-code-editor-service-postgres
+	docker container rm collaborative-code-editor-service-postgres
