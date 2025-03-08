@@ -14,8 +14,7 @@ import {
 import { AxiosRequestConfig, Method } from 'axios';
 import { lastValueFrom } from 'rxjs';
 
-export interface User {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+interface User {
   [key: string]: any;
   id?: string | number;
   ip_address?: string;

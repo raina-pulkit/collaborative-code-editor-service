@@ -6,7 +6,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 configDotenv();
 
-const isDev = process.env.NODE_ENV === 'dev';
+const isDev = process.env.NODE_ENV === 'development';
 
 export const options: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -25,11 +25,11 @@ export const getTypeormOptions = (
   configService: ConfigService,
 ): TypeOrmModuleOptions => ({
   ...options,
-  host: configService.get('DB_HOST'),
-  port: +configService.get('DB_PORT'),
-  username: configService.get('DB_USER'),
-  password: configService.get('DB_PASSWORD'),
-  schema: configService.get('DB_SCHEMA'),
+  host: configService.get<string>('DB_HOST', { infer: true }),
+  port: +configService.get<string>('DB_PORT', { infer: true }),
+  username: configService.get<string>('DB_USER', { infer: true }),
+  password: configService.get<string>('DB_PASSWORD', { infer: true }),
+  schema: configService.get<string>('DB_SCHEMA', { infer: true }),
 });
 
 const migrationOptions: TypeOrmModuleOptions = {

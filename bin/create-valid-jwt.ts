@@ -27,7 +27,7 @@ const createJwt = async (): Promise<void> => {
   console.log(JSON.stringify(somePayload, null, ' '));
   console.log(
     jwt.sign(somePayload, privateKey, {
-      algorithm: 'RS256',
+      algorithm: 'HS256',
       issuer: 'PulkitRaina',
       expiresIn: '10h',
     }),

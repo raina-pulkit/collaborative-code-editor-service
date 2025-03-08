@@ -6,7 +6,11 @@ import {
 import { Method } from 'axios';
 import * as jwt from 'jsonwebtoken';
 import { RequestService } from 'modules/request/request.service';
-import { UserDetails } from 'types/user/user-details';
+import { CreateUserDto } from 'modules/user/dto/create-user.dto';
+import { UpdateUserDto } from 'modules/user/dto/update-user.dto';
+import { Gender, User } from 'modules/user/entities/user.entity';
+import { UserService } from 'modules/user/user.service';
+import { UserDetailsFromGithub } from 'types/user/user-details-from-github';
 
 interface GithubAccessTokenResponse {
   access_token?: string;
@@ -18,7 +22,10 @@ interface GithubAccessTokenResponse {
 
 @Injectable()
 export class GithubAuthService {
-  constructor(private readonly requestService: RequestService) {}
+  constructor(
+    private readonly requestService: RequestService,
+    private readonly userService: UserService,
+  ) {}
 
   getUserDetails = async (code: string): Promise<{ data: string }> => {
     const accessTokenResponse = await this.getAccessToken(code);
@@ -41,15 +48,46 @@ export class GithubAuthService {
       accessTokenResponse.access_token,
     );
 
-    const dataToReturn = {
-      // TODO: Add postgres DB and save user details in your own DB
-      ...userDetailsFromGithub,
+    console.log('userDetailsFromGithub: ', userDetailsFromGithub);
+
+    if (!userDetailsFromGithub || !userDetailsFromGithub.id)
+      throw new BadRequestException('Failed to get user details from Github');
+
+    const userDetailsFormatted = await this.formatUserDetails(
+      userDetailsFromGithub,
+    );
+    const {
+      id,
+      followers,
+      following,
+      email,
+      githubId,
+      githubUsername,
+      githubLink,
+      name,
+      avatarUrl,
+      bio,
+      gender,
+    } = userDetailsFormatted;
+
+    const payload = {
+      id,
+      followers,
+      following,
+      email,
+      githubId,
+      githubUsername,
+      githubLink,
+      name,
+      avatarUrl,
+      bio,
+      gender,
     };
 
     const jwtSecret = process.env.JWT_SECRET;
-    const jwtToken = jwt.sign(dataToReturn, jwtSecret, {
+    const jwtToken = jwt.sign(payload, jwtSecret, {
       expiresIn: '1hr',
-      algorithm: 'RS256',
+      algorithm: 'HS256',
       issuer: 'PulkitRaina',
     });
 
@@ -83,10 +121,10 @@ export class GithubAuthService {
 
   getUserDetailsFromGithub = async (
     accessToken: string,
-  ): Promise<UserDetails> => {
+  ): Promise<UserDetailsFromGithub> => {
     const url = this.getGithubUserDetailsUrl();
-    const userDetails = <Partial<UserDetails>>(
-      await this.requestService.makeHttpRequest({
+    const userDetails = <Promise<UserDetailsFromGithub>>(
+      this.requestService.makeHttpRequest({
         url,
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -95,39 +133,43 @@ export class GithubAuthService {
       })
     );
 
-    const {
-      login,
-      id,
-      avatar_url,
-      html_url,
-      name,
-      email,
-      bio,
-      followers,
-      following,
-      created_at,
-      updated_at,
-    } = userDetails;
+    return userDetails;
+  };
 
-    const userDetailsReturn: UserDetails = {
-      id,
-      login,
-      name,
-      email,
-      bio,
-      avatar_url,
-      html_url,
-      followers,
-      following,
-      created_at,
-      updated_at,
-      accessToken,
-      gender: '',
-    };
+  formatUserDetails = async (
+    userDetails: UserDetailsFromGithub,
+  ): Promise<User> => {
+    const { id } = userDetails;
+    const user = await this.userService.findOneById(+id);
 
-    // TODO: Add Postgres DB and save user details in your own DB
-
-    return userDetailsReturn;
+    if (!user) {
+      const userCreated: CreateUserDto = {
+        email: userDetails.email,
+        followers: userDetails.followers,
+        following: userDetails.following,
+        bio: userDetails.bio,
+        gender: Gender.NULL,
+        githubUsername: userDetails.login,
+        githubLink: userDetails.url,
+        avatarUrl: userDetails.avatar_url,
+        githubId: userDetails.id,
+        name: userDetails.name,
+      };
+      return this.userService.create(userCreated);
+    } else {
+      const userUpdated: UpdateUserDto = {
+        ...user,
+        followers: userDetails.followers,
+        following: userDetails.following,
+        email: userDetails.email,
+        bio: user.bio ?? userDetails.bio,
+        gender: user.gender ?? Gender.NULL,
+        githubUsername: user.githubUsername ?? userDetails.login,
+        githubLink: user.githubLink ?? userDetails.url,
+        avatarUrl: user.avatarUrl ?? userDetails.avatar_url,
+      };
+      return this.userService.update(user.id, userUpdated);
+    }
   };
 
   private getGithubUrl = (): string => process.env.GITHUB_URL;
