@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsDate,
   IsEmail,
@@ -57,9 +57,9 @@ export class User {
   githubLink: string;
 
   @IsString()
-  @Column({ type: 'varchar', nullable: false })
-  @ApiProperty({ description: 'The name of the user' })
-  name: string;
+  @Column({ type: 'varchar', nullable: true })
+  @ApiPropertyOptional({ description: 'The name of the user' })
+  name?: string;
 
   @IsString()
   @IsOptional()
