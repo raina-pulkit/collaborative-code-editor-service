@@ -72,7 +72,7 @@ export default [
       'node/no-extraneous-import': [
         'error',
         {
-          allowModules: ['jsonwebtoken'],
+          allowModules: ['express'],
         },
       ],
       '@typescript-eslint/explicit-module-boundary-types': 'off',
