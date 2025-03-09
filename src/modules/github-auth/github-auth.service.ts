@@ -3,8 +3,8 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { Method } from 'axios';
-import * as jwt from 'jsonwebtoken';
 import { RequestService } from 'modules/request/request.service';
 import { CreateUserDto } from 'modules/user/dto/create-user.dto';
 import { UpdateUserDto } from 'modules/user/dto/update-user.dto';
@@ -25,6 +25,7 @@ export class GithubAuthService {
   constructor(
     private readonly requestService: RequestService,
     private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
   getUserDetails = async (code: string): Promise<{ data: string }> => {
@@ -47,8 +48,6 @@ export class GithubAuthService {
     const userDetailsFromGithub = await this.getUserDetailsFromGithub(
       accessTokenResponse.access_token,
     );
-
-    console.log('userDetailsFromGithub: ', userDetailsFromGithub);
 
     if (!userDetailsFromGithub || !userDetailsFromGithub.id)
       throw new BadRequestException('Failed to get user details from Github');
@@ -84,8 +83,7 @@ export class GithubAuthService {
       gender,
     };
 
-    const jwtSecret = process.env.JWT_SECRET;
-    const jwtToken = jwt.sign(payload, jwtSecret, {
+    const jwtToken = this.jwtService.sign(payload, {
       expiresIn: '1hr',
       algorithm: 'HS256',
       issuer: 'PulkitRaina',

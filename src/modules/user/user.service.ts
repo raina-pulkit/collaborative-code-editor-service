@@ -3,8 +3,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as jwt from 'jsonwebtoken';
 import { DeleteResult, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -15,6 +15,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
 
   /**
@@ -110,13 +111,11 @@ export class UserService {
     return this.userRepository.softDelete(id);
   }
 
-  getDetails(token: string): User {
-    const jwtSecret = process.env.JWT_SECRET;
-    const userDetails: User = <User>jwt.verify(token, jwtSecret, {
+  async getDetails(token: string): Promise<User> {
+    const userDetails: User = <User>await this.jwtService.verifyAsync(token, {
       algorithms: ['HS256'],
+      issuer: 'PulkitRaina',
     });
-
-    throw new BadRequestException('Not implemented');
 
     return userDetails;
   }

@@ -7,9 +7,11 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiExcludeEndpoint, ApiOkResponse } from '@nestjs/swagger';
 import { parameterValidator } from 'config/validator';
+import { JWTGuard } from 'modules/github-auth/auth.guard';
 import { DeleteResult } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -17,6 +19,7 @@ import { User } from './entities/user.entity';
 import { UserService } from './user.service';
 
 @Controller('v1/user')
+@UseGuards(JWTGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -61,7 +64,7 @@ export class UserController {
     description: 'Successfully fetched user details',
     type: User,
   })
-  getData(@Headers() authData: any): User {
+  getData(@Headers() authData: any): Promise<User> {
     return this.userService.getDetails(
       (authData.authorization as string).split(' ')[1],
     );

@@ -1,6 +1,7 @@
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import prettier from 'eslint-plugin-prettier';
 import node from 'eslint-plugin-node';
+import importPlugin from 'eslint-plugin-import';
 import globals from 'globals';
 import tsParser from '@typescript-eslint/parser';
 import path from 'node:path';
@@ -30,6 +31,7 @@ export default [
       '@typescript-eslint': typescriptEslint,
       prettier,
       node,
+      import: importPlugin,
     },
 
     languageOptions: {
@@ -52,14 +54,12 @@ export default [
     rules: {
       'prettier/prettier': 'error',
       '@typescript-eslint/interface-name-prefix': 'off',
-
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
           argsIgnorePattern: '^_',
         },
       ],
-
       '@typescript-eslint/explicit-function-return-type': [
         'error',
         {
@@ -67,24 +67,20 @@ export default [
           allowTypedFunctionExpressions: true,
         },
       ],
-
       'no-return-await': 'off',
       '@typescript-eslint/return-await': ['error', 'in-try-catch'],
-
       'node/no-extraneous-import': [
         'error',
         {
           allowModules: ['jsonwebtoken'],
         },
       ],
-
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       'no-unused-vars': 'off',
       'require-await': 'off',
       '@typescript-eslint/require-await': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
-
       'no-restricted-syntax': [
         'error',
         {
@@ -97,6 +93,14 @@ export default [
           selector:
             'CallExpression[callee.name=it][arguments.0.value!=/^should/]',
           message: '"it" should start with "should"',
+        },
+      ],
+      'import/no-extraneous-dependencies': [
+        'error',
+        {
+          devDependencies: false,
+          optionalDependencies: false,
+          peerDependencies: false,
         },
       ],
     },
