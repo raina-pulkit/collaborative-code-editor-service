@@ -314,7 +314,6 @@
           "githubId",
           "email",
           "githubLink",
-          "name",
           "bio",
           "gender",
           "avatarUrl",
