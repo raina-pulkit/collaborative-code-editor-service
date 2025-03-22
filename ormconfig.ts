@@ -11,8 +11,8 @@ const isDev = process.env.NODE_ENV === 'development';
 export const options: TypeOrmModuleOptions = {
   type: 'postgres',
   namingStrategy: new SnakeNamingStrategy(),
-  entities: ['dist/modules/**/entities/*{.ts,.js}'],
-  migrations: ['dist/migrations/**/*{.ts,.js}'],
+  entities: ['dist/src/modules/**/entities/*{.ts,.js}'],
+  migrations: ['dist/src/migrations/**/*{.ts,.js}'],
   retryAttempts: 10,
   retryDelay: 3000,
   synchronize: isDev,

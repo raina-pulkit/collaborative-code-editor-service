@@ -104,6 +104,23 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     });
   }
 
+  @SubscribeMessage(ACTIONS.TYPING)
+  handleTyping(
+    socket: Socket,
+    payload: {
+      id: string;
+      userId: string;
+    },
+  ): void {
+    const { id, userId } = payload;
+
+    // Broadcast to all clients in the room (including sender)
+    this.server.to(id).emit(ACTIONS.SOMEONE_TYPING, {
+      userName: this.userSocketMap[socket.id].userName,
+      userId: userId,
+    });
+  }
+
   // @SubscribeMessage(ACTIONS.CODE_CHANGE)
   // handleCodeChange(
   //   socket: Socket,
