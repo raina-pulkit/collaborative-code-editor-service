@@ -1,18 +1,19 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TerminusModule } from '@nestjs/terminus';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { configSchema } from 'config/config-schema';
+import { getTypeormOptions } from '../ormconfig';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { GithubAuthService } from './modules/github-auth/github-auth.service';
 import { GithubAuthController } from './modules/github-auth/github-auth.controller';
-import { RequestModule } from './modules/request/request.module';
 import { GithubAuthModule } from './modules/github-auth/github-auth.module';
-import { HttpModule } from '@nestjs/axios';
-import { UserModule } from './modules/user/user.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { configSchema } from 'config/config-schema';
-import { TerminusModule } from '@nestjs/terminus';
+import { GithubAuthService } from './modules/github-auth/github-auth.service';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { getTypeormOptions } from '../ormconfig';
+import { RequestModule } from './modules/request/request.module';
+import { SocketModule } from './modules/socket/socket.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -30,12 +31,14 @@ import { getTypeormOptions } from '../ormconfig';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService): TypeOrmModuleOptions => getTypeormOptions(configService)
+      useFactory: (configService: ConfigService): TypeOrmModuleOptions =>
+        getTypeormOptions(configService),
     }),
     HttpModule,
     RequestModule,
     GithubAuthModule,
     UserModule,
+    SocketModule,
   ],
   controllers: [AppController, GithubAuthController],
   providers: [AppService, GithubAuthService],
