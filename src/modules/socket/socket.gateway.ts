@@ -16,6 +16,8 @@ interface UserSocketMap {
   };
 }
 
+let codeStore = undefined;
+
 @WebSocketGateway()
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
@@ -71,6 +73,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       userName,
       userId,
       socketId: socket.id,
+      code: codeStore,
     });
   }
 
@@ -121,20 +124,17 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     });
   }
 
-  // @SubscribeMessage(ACTIONS.CODE_CHANGE)
-  // handleCodeChange(
-  //   socket: Socket,
-  //   payload: { roomId: string; code: string },
-  // ): void {
-  //   const { roomId, code } = payload;
-  //   socket.to(roomId).emit(ACTIONS.CODE_CHANGE, { code });
-  // }
-
-  // @SubscribeMessage(ACTIONS.SYNC_CODE)
-  // handleSyncCode(
-  //   @MessageBody() payload: { socketId: string; code: string },
-  // ): void {
-  //   const { socketId, code } = payload;
-  //   this.server.to(socketId).emit(ACTIONS.CODE_CHANGE, { code });
-  // }
+  @SubscribeMessage(ACTIONS.CODE_CHANGE)
+  handleCodeChange(
+    socket: Socket,
+    payload: { id: string; code: string },
+  ): void {
+    const { id, code } = payload;
+    if (code === undefined) {
+      socket.to(id).emit(ACTIONS.SYNC_CODE, { code: codeStore });
+    } else {
+      codeStore = code;
+      socket.to(id).emit(ACTIONS.SYNC_CODE, { code });
+    }
+  }
 }
