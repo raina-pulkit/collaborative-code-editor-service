@@ -27,7 +27,7 @@ export class Room {
 
   @Column({ type: 'uuid', nullable: false })
   @ApiProperty({ description: `Room owner's uuid` })
-  ownerId: string;
+  ownerUuid: string;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'ownerId' })

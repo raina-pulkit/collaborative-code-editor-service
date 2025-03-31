@@ -57,14 +57,17 @@ export class RoomService {
     id: string,
     updateRoomDto: UpdateRoomDto,
   ): Promise<UpdateResult> {
+    const updateRoomDtoWithoutId = { ...updateRoomDto };
+    delete updateRoomDtoWithoutId.id;
+
     const invitedUsers = await Promise.all(
-      updateRoomDto.invitedUsers.map(async uuid =>
+      updateRoomDtoWithoutId.invitedUsers.map(async uuid =>
         this.userRepository.findOne({ where: { id: uuid } }),
       ),
     );
 
     return this.roomRepository.update(id, {
-      ...updateRoomDto,
+      ...updateRoomDtoWithoutId,
       invitedUsers: invitedUsers.filter(user => user !== undefined),
     });
   }
