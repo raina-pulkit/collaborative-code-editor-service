@@ -34,36 +34,3 @@ export interface UserDetailsFromGithub {
   created_at: string;
   updated_at: string;
 }
-
-/* 
-  userDetailsFromGithub:  {
-  html_url: 'https://github.com/raina-pulkit',
-  followers_url: 'https://api.github.com/users/raina-pulkit/followers',
-  following_url: 'https://api.github.com/users/raina-pulkit/following{/other_user}',
-  gists_url: 'https://api.github.com/users/raina-pulkit/gists{/gist_id}',
-  starred_url: 'https://api.github.com/users/raina-pulkit/starred{/owner}{/repo}',
-  subscriptions_url: 'https://api.github.com/users/raina-pulkit/subscriptions',
-  organizations_url: 'https://api.github.com/users/raina-pulkit/orgs',
-  repos_url: 'https://api.github.com/users/raina-pulkit/repos',
-  events_url: 'https://api.github.com/users/raina-pulkit/events{/privacy}',
-  received_events_url: 'https://api.github.com/users/raina-pulkit/received_events',
-  type: 'User',
-  user_view_type: 'public',
-  site_admin: false,
-  name: 'Pulkit Raina',
-  company: null,
-  blog: '',
-  location: null,
-  email: null,
-  hireable: null,
-  bio: null,
-  twitter_username: null,
-  notification_email: null,
-  public_repos: 13,
-  public_gists: 0,
-  followers: 0,
-  following: 0,
-  created_at: '2023-07-25T18:01:06Z',
-  updated_at: '2025-03-08T18:05:29Z'
-}
-*/
