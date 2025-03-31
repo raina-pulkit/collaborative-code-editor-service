@@ -14,7 +14,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ schema: 'public', name: 'rooms' })
+@Entity({ schema: 'public', name: 'room' })
 export class Room {
   constructor(room?: Partial<Room>) {
     Object.assign(this, room || {});
@@ -41,7 +41,7 @@ export class Room {
 
   @ManyToMany(() => User)
   @JoinTable({
-    name: 'room_invited_users',
+    name: 'room_invited_user',
     joinColumn: { name: 'roomId', referencedColumnName: 'id' },
     inverseJoinColumn: { name: 'userId', referencedColumnName: 'id' },
   })

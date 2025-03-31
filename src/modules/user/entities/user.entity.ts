@@ -24,7 +24,7 @@ export enum Gender {
   NULL = '',
 }
 
-@Entity({ schema: 'public', name: 'users' })
+@Entity({ schema: 'public', name: 'user' })
 export class User {
   constructor(notes?: Partial<User>) {
     Object.assign(this, notes || {});
