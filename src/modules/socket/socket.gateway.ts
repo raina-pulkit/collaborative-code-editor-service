@@ -16,13 +16,16 @@ interface UserSocketMap {
   };
 }
 
-let codeStore = undefined;
+interface CodeMap {
+  [key: string]: string;
+}
 
 @WebSocketGateway()
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
   private userSocketMap: UserSocketMap = {};
+  private codeMap: CodeMap = {};
 
   handleConnection(_socket: Socket): void {
     console.log('socket connected');
@@ -73,7 +76,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       userName,
       userId,
       socketId: socket.id,
-      code: codeStore,
+      code: this.codeMap[id],
     });
   }
 
@@ -131,9 +134,9 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ): void {
     const { id, code } = payload;
     if (code === undefined) {
-      socket.to(id).emit(ACTIONS.SYNC_CODE, { code: codeStore });
+      socket.to(id).emit(ACTIONS.SYNC_CODE, { code: this.codeMap[id] });
     } else {
-      codeStore = code;
+      this.codeMap[id] = code;
       socket.to(id).emit(ACTIONS.SYNC_CODE, { code });
     }
   }

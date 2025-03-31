@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsOptional, IsUUID } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class CreateRoomDto {
   @IsUUID()
@@ -22,4 +28,13 @@ export class CreateRoomDto {
   })
   @IsUUID(undefined, { each: true })
   invitedUsers: string[];
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    description: 'Room last language',
+    nullable: true,
+    default: 'typescript',
+  })
+  lastLanguage = 'typescript';
 }

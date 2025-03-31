@@ -30,23 +30,8 @@ export class RoomService {
     return this.roomRepository.save(room);
   }
 
-  findAll(query: GetRoomsDto): Promise<Room[]> {
-    const queryBuilder = this.roomRepository.createQueryBuilder('room');
-    if (query.ownerUuids) {
-      queryBuilder.where('room.owner.id IN (:...ownerUuids)', {
-        ownerUuids: query.ownerUuids,
-      });
-    }
-    if (query.roomId) {
-      queryBuilder.andWhere('room.id = :roomId', { roomId: query.roomId });
-    }
-    if (query.invitedUserUuids) {
-      queryBuilder.andWhere('room.invitedUsers.id IN (:...invitedUserUuids)', {
-        invitedUserUuids: query.invitedUserUuids,
-      });
-    }
-
-    return queryBuilder.getMany();
+  findAll(_query: GetRoomsDto): Promise<Room[]> {
+    return this.roomRepository.find();
   }
 
   findOne(id: string): Promise<Room> {
@@ -60,15 +45,19 @@ export class RoomService {
     const updateRoomDtoWithoutId = { ...updateRoomDto };
     delete updateRoomDtoWithoutId.id;
 
-    const invitedUsers = await Promise.all(
-      updateRoomDtoWithoutId.invitedUsers.map(async uuid =>
-        this.userRepository.findOne({ where: { id: uuid } }),
-      ),
-    );
+    const invitedUsers = updateRoomDtoWithoutId.invitedUsers
+      ? await Promise.all(
+          updateRoomDtoWithoutId.invitedUsers.map(async uuid =>
+            this.userRepository.findOne({ where: { id: uuid } }),
+          ),
+        )
+      : undefined;
 
     return this.roomRepository.update(id, {
       ...updateRoomDtoWithoutId,
-      invitedUsers: invitedUsers.filter(user => user !== undefined),
+      invitedUsers: invitedUsers
+        ? invitedUsers.filter(user => user !== undefined)
+        : undefined,
     });
   }
 
