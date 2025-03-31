@@ -1,7 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsUUID } from 'class-validator';
+import { IsArray, IsBoolean, IsOptional, IsUUID } from 'class-validator';
 
 export class CreateRoomDto {
+  @IsUUID()
+  @IsOptional()
+  @ApiProperty({ description: `Room uuid`, nullable: true })
+  id?: string;
+
   @IsUUID()
   @ApiProperty({ description: `Room owner uuid`, nullable: false })
   ownerUuid: string;
