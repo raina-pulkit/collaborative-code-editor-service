@@ -15,15 +15,6 @@ services:
     command: npm run start:dev
     env_file:
       - .env
-    environment:
-      NODE_ENV: development
-      PORT: 3000
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_SCHEMA: public
-      DB_NAME: postgres
     depends_on:
       - postgres
 
