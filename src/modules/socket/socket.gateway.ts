@@ -45,8 +45,17 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   async handleDisconnect(socket: Socket): Promise<void> {
     console.log('socket disconnected: ', socket.id);
+
+    // Get all rooms the socket is in
+    const socketRooms = Array.from(socket.rooms).filter(
+      room => room !== socket.id,
+    );
+
     // Save code state if user disconnects
     await this.saveCodeStateForUserRooms(socket);
+
+    // Explicitly leave all rooms
+    await Promise.all(socketRooms.map(roomId => socket.leave(roomId)));
 
     const user = this.userSocketMap[socket.id];
 
