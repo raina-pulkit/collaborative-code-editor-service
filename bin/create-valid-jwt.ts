@@ -1,5 +1,5 @@
 import fs from 'fs';
-import jwt from 'jsonwebtoken';
+import { sign } from 'jsonwebtoken';
 import path from 'path';
 import util from 'util';
 import * as uuid from 'uuidv7';
@@ -26,7 +26,7 @@ const createJwt = async (): Promise<void> => {
   };
   console.log(JSON.stringify(somePayload, null, ' '));
   console.log(
-    jwt.sign(somePayload, privateKey, {
+    sign(somePayload, privateKey, {
       algorithm: 'HS256',
       issuer: 'PulkitRaina',
       expiresIn: '10h',
