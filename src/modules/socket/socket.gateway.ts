@@ -140,4 +140,18 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       socket.to(id).emit(ACTIONS.SYNC_CODE, { code });
     }
   }
+
+  @SubscribeMessage(ACTIONS.END_ROOM)
+  async handleEndRoom(socket: Socket, payload: { id: string }): Promise<void> {
+    const { id } = payload;
+
+    // Leave the room first
+    await socket.leave(id);
+
+    // Remove user from the map
+    delete this.userSocketMap[socket.id];
+
+    // Broadcast to all clients in the room to end the room
+    this.server.to(id).emit(ACTIONS.END_ROOM_ACK);
+  }
 }
