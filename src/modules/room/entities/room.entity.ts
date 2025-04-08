@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDate, IsUUID } from 'class-validator';
+import { IsBoolean, IsDate, IsString, IsUUID } from 'class-validator';
 import { User } from 'modules/user/entities/user.entity';
 import {
   Column,
@@ -47,6 +47,11 @@ export class Room {
   })
   @ApiProperty({ description: 'Array of users invited to the room' })
   invitedUsers: User[];
+
+  @IsString()
+  @Column({ type: 'text', nullable: true, default: 'typescript' })
+  @ApiProperty({ description: 'last language used in the room' })
+  lastLanguage?: string;
 
   @IsDate()
   @CreateDateColumn({ type: 'timestamptz', nullable: false })
