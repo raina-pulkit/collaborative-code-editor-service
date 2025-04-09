@@ -24,7 +24,8 @@ services:
     environment:
       PGDATA: /var/lib/postgresql@17/data
     volumes:
-      - ./tmp/pgdata/collaborative-code-editor-service:/var/lib/postgresql/data
+      # - ./tmp/pgdata/collaborative-code-editor-service:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U postgres -d postgres']
       interval: 1m30s
@@ -33,3 +34,7 @@ services:
       start_period: 30s
     ports:
       - 5432:5432
+
+volumes:
+  pgdata:
+

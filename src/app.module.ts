@@ -4,6 +4,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TerminusModule } from '@nestjs/terminus';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { configSchema } from 'config/config-schema';
+import { MailModule } from 'modules/mail/mail.module';
+import { QuestionModule } from 'modules/question/question.module';
 import { getTypeormOptions } from '../ormconfig';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -41,6 +43,8 @@ import { UserModule } from './modules/user/user.module';
     UserModule,
     SocketModule,
     RoomModule,
+    QuestionModule,
+    MailModule,
   ],
   controllers: [AppController, GithubAuthController],
   providers: [AppService, GithubAuthService],

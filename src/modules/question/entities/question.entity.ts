@@ -1,11 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-@Entity()
+@Entity({ schema: 'public', name: 'question' })
 export class Question {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'text' })
   title: string;
 
   @Column({ type: 'text' })
