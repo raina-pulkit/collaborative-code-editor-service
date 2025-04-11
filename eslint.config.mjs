@@ -46,8 +46,8 @@ export default [
 
       parserOptions: {
         project: 'tsconfig.json',
-        tsconfigRootDir:
-          '/Users/pulkit.raina/Desktop/Personal/collaborative-code-editor-service',
+        tsconfigRootDir: __dirname,
+          // '/Users/pulkit.raina/Desktop/Personal/collaborative-code-editor-service',
       },
     },
 
