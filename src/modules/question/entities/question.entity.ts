@@ -29,7 +29,7 @@ export class Question {
   @Column({ type: 'enum', enum: DifficultyEnum })
   difficulty: DifficultyEnum;
 
-  @Column({ default: false })
+  @Column({ type: 'boolean', default: false })
   isCustom: boolean;
 
   @CreateDateColumn()
