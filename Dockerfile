@@ -4,6 +4,8 @@
 FROM --platform=$BUILDPLATFORM node:23-alpine3.20 AS install
 
 WORKDIR /usr/src/app
+ARG GITHUB_ACCESS_TOKEN
+ENV GITHUB_ACCESS_TOKEN=$GITHUB_ACCESS_TOKEN
 ENV NODE_ENV=development
 RUN apk add --no-cache g++ make python3
 ADD package.json package-lock.json .npmrc* /usr/src/app/
@@ -29,6 +31,8 @@ CMD ["/bin/sh", "-c", "node dist/main"]
 FROM node:23-alpine3.20 AS production
 
 WORKDIR /usr/src/app
+ARG GITHUB_ACCESS_TOKEN
+ENV GITHUB_ACCESS_TOKEN=$GITHUB_ACCESS_TOKEN
 ENV NODE_ENV=production
 ENV PORT=3000
 
