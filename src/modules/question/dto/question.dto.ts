@@ -1,10 +1,5 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-
-export enum DifficultyEnum {
-  EASY = 'easy',
-  MEDIUM = 'medium',
-  HARD = 'hard',
-}
+import { DifficultyEnum } from '../entities/question.entity';
 
 export class CreateQuestionDto {
   @IsString()

@@ -1,5 +1,7 @@
-import { DifficultyEnum } from 'modules/question/dto/question.dto';
-import { Question } from 'modules/question/entities/question.entity';
+import {
+  DifficultyEnum,
+  Question,
+} from 'modules/question/entities/question.entity';
 import { DataSource } from 'typeorm';
 
 const seed_questions: {
