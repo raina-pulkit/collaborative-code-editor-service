@@ -203,7 +203,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     },
   ): Promise<void> {
     const { id } = payload;
-    console.log('od: ', id);
+
     // Save code state before leaving
     await this.saveCodeStateForRoom(id);
 
@@ -306,6 +306,26 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     socket.to(id).emit(ACTIONS.LANGUAGE_CHANGE_HANDLE, {
       language,
+    });
+  }
+
+  @SubscribeMessage(ACTIONS.END_ROOM)
+  async handleEndRoom(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() payload: { id: string },
+  ) {
+    const { id } = payload;
+
+    // Save code state before ending the room
+    this.saveCodeStateForRoom(id).catch(error => {
+      console.error(`Failed to save code state for room ${id}:`, error);
+    });
+
+    await Promise.all([socket.leave(id), this.roomService.remove(id)]);
+
+    // Emit end room event to all clients in the room
+    this.server.to(id).emit(ACTIONS.END_ROOM, {
+      message: 'Room has been ended.',
     });
   }
 
