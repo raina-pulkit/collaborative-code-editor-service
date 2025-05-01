@@ -109,6 +109,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "build:watch": "nest build --watch",
+    "db:seed:fake-questions": "npm install puppeteer -D -E --ignore-scripts && npm i && node dist/seeds/fake-questions/index.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "prestart": "npm run build && npm run migration:generate",
     "start": "nest start",

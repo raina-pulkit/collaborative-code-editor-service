@@ -29,7 +29,6 @@ export class MailService {
 
     const failed = allResp.filter(resp => resp.status === 'rejected');
 
-    if (failed.length > 0) return failed;
-    else return [];
+    return failed;
   }
 }
