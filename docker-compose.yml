@@ -4,8 +4,6 @@ services:
     build:
       context: .
       target: development
-      args:
-        GITHUB_ACCESS_TOKEN: ${GITHUB_ACCESS_TOKEN}
     volumes:
       - ./src:/usr/src/app/src
       - ./tmp/keys:/usr/src/app/keys
