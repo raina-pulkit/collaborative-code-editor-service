@@ -4,7 +4,7 @@ import {
 } from 'modules/question/entities/question.entity';
 import { DataSource } from 'typeorm';
 
-const seed_questions: {
+export const seed_questions: {
   title: string;
   description: string;
   difficulty: DifficultyEnum;
