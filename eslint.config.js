@@ -19,7 +19,17 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ['**/.eslintrc.js', '**/tsconfig.json', '**/.eslintrc.js'],
+    ignores: [
+      '**/.eslintrc.js',
+      '**/tsconfig.json',
+      '**/.eslintrc.js',
+      'dist/',
+      'build/',
+      'node_modules/',
+      'eslint.config.js',
+      '.prettierrc',
+      '*.config.js',
+    ],
   },
   ...compat.extends(
     'plugin:@typescript-eslint/eslint-recommended',
@@ -41,23 +51,33 @@ export default [
       },
 
       parser: tsParser,
-      ecmaVersion: 5,
+      ecmaVersion: 'latest',
       sourceType: 'module',
 
       parserOptions: {
         project: 'tsconfig.json',
-        tsconfigRootDir:
-          '/Users/pulkit.raina/Desktop/Personal/collaborative-code-editor-service',
+        tsconfigRootDir: __dirname,
       },
     },
 
     rules: {
-      'prettier/prettier': 'error',
-      '@typescript-eslint/interface-name-prefix': 'off',
+      'prettier/prettier': [
+        'error',
+        {
+          singleQuote: true,
+          trailingComma: 'all',
+          tabWidth: 2,
+          semi: true,
+          arrowParens: 'avoid',
+          bracketSpacing: true,
+          endOfLine: 'auto',
+        },
+      ],
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
           argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
         },
       ],
       '@typescript-eslint/explicit-function-return-type': [
@@ -75,6 +95,9 @@ export default [
           allowModules: ['express'],
         },
       ],
+      '@typescript-eslint/interface-name-prefix': 'off',
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/return-await': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       'no-unused-vars': 'off',
