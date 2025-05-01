@@ -1,5 +1,11 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 
+export enum DifficultyEnum {
+  EASY = 'easy',
+  MEDIUM = 'medium',
+  HARD = 'hard',
+}
+
 export class CreateQuestionDto {
   @IsString()
   title: string;
@@ -7,10 +13,10 @@ export class CreateQuestionDto {
   @IsString()
   description: string;
 
-  @IsEnum(['easy', 'medium', 'hard'], {
+  @IsEnum(DifficultyEnum, {
     message: 'difficulty must be one of: easy, medium, hard',
   })
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: DifficultyEnum;
 
   @IsOptional()
   isCustom?: boolean;

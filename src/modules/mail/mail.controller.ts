@@ -1,8 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
+import { JWTGuard } from 'modules/github-auth/auth.guard';
 import { MailService } from './mail.service';
 
 @Controller('send-invite')
+@UseGuards(JWTGuard)
 export class MailController {
   constructor(private readonly mailService: MailService) {}
 
@@ -17,13 +19,13 @@ export class MailController {
       interviewers: string[];
       roomId: string;
     },
-  ): Promise<{ message: string }> {
+  ): Promise<{ message: string; failedEmails?: string[] }> {
     console.log('Received invite request:', body);
 
     const { interviewees, interviewers, roomId } = body;
     const allEmails = [...interviewees, ...interviewers];
 
-    const joinLink = `http://localhost:5173/editor/${roomId}`;
+    const joinLink = `${process.env.GITHUB_REDIRECT_URI}/editor/${roomId}`;
 
     const emailContent = `
   <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
@@ -46,11 +48,18 @@ export class MailController {
   </div>
 `;
 
-    await this.mailService.sendBulkInvites(
+    const failed = await this.mailService.sendBulkInvites(
       allEmails,
       'Interview Room Invitation',
       emailContent,
     );
+
+    if (failed.length > 0) {
+      return {
+        message: 'Some invites failed to send',
+        failedEmails: failed.map(failed => failed.reason),
+      };
+    }
 
     return { message: 'Invites sent successfully' };
   }

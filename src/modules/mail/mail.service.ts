@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import * as nodemailer from 'nodemailer';
+import { createTransport, Transporter } from 'nodemailer';
 
 @Injectable()
 export class MailService {
-  private transporter;
+  private transporter: Transporter;
 
   constructor() {
-    this.transporter = nodemailer.createTransport({
-      service: 'gmail', 
+    this.transporter = createTransport({
+      service: 'gmail',
       auth: {
         user: process.env.SMTP_EMAIL,
         pass: process.env.SMTP_PASS,
@@ -23,6 +23,13 @@ export class MailService {
       html: body,
     }));
 
-    await Promise.all(mailOptions.map(opt => this.transporter.sendMail(opt)));
+    const allResp = await Promise.allSettled(
+      mailOptions.map(opt => this.transporter.sendMail(opt)),
+    );
+
+    const failed = allResp.filter(resp => resp.status === 'rejected');
+
+    if (failed.length > 0) return failed;
+    else return [];
   }
 }

@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreateQuestionDto } from './dto/question.dto';
 import { Question } from './entities/question.entity';
-import { CreateQuestionDto } from './question.dto';
-
-const allowedDifficulties = ['easy', 'medium', 'hard'] as const;
 
 @Injectable()
 export class QuestionService {
@@ -26,14 +24,12 @@ export class QuestionService {
   }
 
   async bulkCreateQuestions(rawData: any[]): Promise<Question[]> {
-    const validatedData: CreateQuestionDto[] = rawData
-      .filter(q => allowedDifficulties.includes(q.difficulty))
-      .map(q => ({
-        title: q.title,
-        description: q.description,
-        difficulty: q.difficulty as 'easy' | 'medium' | 'hard',
-        isCustom: q.isCustom ?? false,
-      }));
+    const validatedData: CreateQuestionDto[] = rawData.map(q => ({
+      title: q.title,
+      description: q.description,
+      difficulty: q.difficulty,
+      isCustom: q.isCustom ?? false,
+    }));
 
     // Get all existing question titles
     const existing = await this.questionRepo.find();
