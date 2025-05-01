@@ -7,7 +7,6 @@ start:
 	echo "BUILDPLATFORM: ${BUILDPLATFORM}"
 	docker compose version
 	docker compose up -d
-	make db-seed-questions
 
 logs:
 	docker compose logs -f ${SERVICE_NAME}

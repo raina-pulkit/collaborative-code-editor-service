@@ -6,9 +6,8 @@ export class SeedMigrationQuestions1746138608066 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     const questionsEntities: Partial<Question>[] = seed_questions.map(
       question => ({
-        title: question.title,
-        description: question.description,
-        difficulty: question.difficulty,
+        ...question,
+        isCustom: false,
       }),
     );
 
