@@ -111,7 +111,7 @@
     "db:seed:fake-questions": "node dist/src/seeds/fake-questions/index.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "prestart": "npm run build && npm run migration:run && npm run migration:generate && npm run migration:run",
-    "start": "nest start --watch",
+    "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",

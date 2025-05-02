@@ -27,7 +27,7 @@ export class CreateRoomDto {
     nullable: false,
   })
   @IsArray()
-  @IsEmail(null, { each: true })
+  @IsEmail({}, { each: true })
   invitedUsers: string[];
 
   @IsString()
