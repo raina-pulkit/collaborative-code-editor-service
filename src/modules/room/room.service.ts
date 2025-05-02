@@ -17,14 +17,17 @@ export class RoomService {
   ) {}
 
   async create(createRoomDto: CreateRoomDto): Promise<Room> {
-    const invitedUsers = await Promise.all(
-      createRoomDto.invitedUsers.map(async uuid =>
-        this.userRepository.findOne({ where: { id: uuid } }),
+    const invitedUsers = await Promise.allSettled(
+      createRoomDto.invitedUsers.map(async email =>
+        this.userRepository.findOne({ where: { email } }),
       ),
     );
+
+    const validUsers = invitedUsers.filter(user => user.status === 'fulfilled');
+
     const room = this.roomRepository.create({
       ...createRoomDto,
-      invitedUsers: invitedUsers.filter(user => user !== undefined),
+      invitedUsers: validUsers.map(user => user.value),
     });
 
     return this.roomRepository.save(room);
