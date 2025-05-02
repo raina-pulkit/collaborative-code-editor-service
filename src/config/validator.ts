@@ -9,4 +9,4 @@ export const parameterValidator = (): ValidationPipe => {
       enableImplicitConversion: true,
     },
   });
-}
+};
