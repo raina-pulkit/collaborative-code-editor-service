@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 import { JWTGuard } from 'modules/github-auth/auth.guard';
-import { CreateQuestionDto } from './dto/question.dto';
+import { CreateQuestionDto } from './dto/create-question-dto';
 import { Question } from './entities/question.entity';
 import { QuestionService } from './question.service';
 
