@@ -5,8 +5,8 @@ import {
   Get,
   Headers,
   Param,
-  Patch,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { ApiExcludeEndpoint, ApiOkResponse } from '@nestjs/swagger';
@@ -41,7 +41,7 @@ export class UserController {
     return this.userService.findOneByUuid(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @ApiOkResponse({ description: 'Successfully updated a user', type: User })
   update(
     @Param('id', parameterValidator()) id: string,
