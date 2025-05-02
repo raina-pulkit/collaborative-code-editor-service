@@ -10,7 +10,7 @@ services:
       - ./bin:/usr/src/app/bin
     ports:
       - 3030:3000
-    command: npm run start:dev
+    command: npm run prestart && npm run start:dev
     env_file:
       - .env
     depends_on:
