@@ -30,6 +30,9 @@ generate-jwt:
 generate-api-spec:
 	curl -s http://localhost:3030/api-json | jq . > swagger.json
 
+db-seed-questions:
+	docker compose exec ${SERVICE_NAME} npm run db:seed:fake-questions
+
 clean-db:
 	docker container stop collaborative-code-editor-service-postgres
 	docker container rm collaborative-code-editor-service-postgres

@@ -11,6 +11,7 @@ import { GithubAuthController } from './modules/github-auth/github-auth.controll
 import { GithubAuthModule } from './modules/github-auth/github-auth.module';
 import { GithubAuthService } from './modules/github-auth/github-auth.service';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
+import { QuestionModule } from './modules/question/question.module';
 import { RequestModule } from './modules/request/request.module';
 import { RoomModule } from './modules/room/room.module';
 import { SocketModule } from './modules/socket/socket.module';
@@ -41,6 +42,7 @@ import { UserModule } from './modules/user/user.module';
     UserModule,
     SocketModule,
     RoomModule,
+    QuestionModule,
   ],
   controllers: [AppController, GithubAuthController],
   providers: [AppService, GithubAuthService],

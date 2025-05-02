@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Migrations1743448812060 implements MigrationInterface {
-  name = 'Migrations1743448812060';
+export class Migration1746120006924 implements MigrationInterface {
+  name = 'Migration1746120006924';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -12,6 +12,12 @@ export class Migrations1743448812060 implements MigrationInterface {
     );
     await queryRunner.query(
       `CREATE TABLE "room" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "owner_uuid" uuid NOT NULL, "is_private" boolean NOT NULL DEFAULT false, "last_language" text DEFAULT 'typescript', "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP WITH TIME ZONE, "ownerId" uuid, CONSTRAINT "PK_c6d46db005d623e691b2fbcba23" PRIMARY KEY ("id"))`,
+    );
+    await queryRunner.query(
+      `CREATE TYPE "public"."question_difficulty_enum" AS ENUM('easy', 'medium', 'hard')`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE "question" ("id" SERIAL NOT NULL, "title" text NOT NULL, "description" text NOT NULL, "difficulty" "public"."question_difficulty_enum" NOT NULL, "is_custom" boolean NOT NULL DEFAULT false, "created_at" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_21e5786aa0ea704ae185a79b2d5" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TABLE "room_invited_user" ("roomId" uuid NOT NULL, "userId" uuid NOT NULL, CONSTRAINT "PK_1de4ace7739557623bab523a6c5" PRIMARY KEY ("roomId", "userId"))`,
@@ -50,6 +56,8 @@ export class Migrations1743448812060 implements MigrationInterface {
       `DROP INDEX "public"."IDX_6c2a8ddc7113e403d90eb23dde"`,
     );
     await queryRunner.query(`DROP TABLE "room_invited_user"`);
+    await queryRunner.query(`DROP TABLE "question"`);
+    await queryRunner.query(`DROP TYPE "public"."question_difficulty_enum"`);
     await queryRunner.query(`DROP TABLE "room"`);
     await queryRunner.query(`DROP TABLE "user"`);
     await queryRunner.query(`DROP TYPE "public"."user_gender_enum"`);
