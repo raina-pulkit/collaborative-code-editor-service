@@ -110,7 +110,7 @@
     "build:watch": "nest build --watch",
     "db:seed:fake-questions": "node dist/src/seeds/fake-questions/index.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "prestart": "npm run build && npm run migration:run && npm run migration:generate && npm run migration:run",
+    "prestart": "npm run build && (npm run migration:run || true; npm run migration:generate || true)",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -120,7 +120,7 @@
     "test:watch": "jest --watch",
     "generate-api-spec": "nest generate openapi",
     "typeorm": "typeorm-ts-node-commonjs -d ./ormconfig.ts",
-    "migration:generate": "npm run typeorm -- migration:generate ./src/migrations/migration && npm run migration:run || true",
+    "migration:generate": "npm run typeorm -- migration:generate ./src/migrations/migration",
     "migration:run": "npm run typeorm -- migration:run",
     "migration:revert": "npm run typeorm -- migration:revert",
     "migration:create": "npm run typeorm -- migration:create"
