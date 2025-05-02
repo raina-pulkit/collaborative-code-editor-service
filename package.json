@@ -118,8 +118,10 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
+    "generate-api-spec": "nest generate openapi",
     "typeorm": "typeorm-ts-node-commonjs -d ./ormconfig.ts",
     "migration:generate": "npm run typeorm -- migration:generate ./src/migrations/migration",
+    "migration:run": "npm run typeorm -- migration:run",
     "migration:revert": "npm run typeorm -- migration:revert",
     "migration:create": "npm run typeorm -- migration:create"
   }

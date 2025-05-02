@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsBoolean,
+  IsEmail,
   IsOptional,
   IsString,
   IsUUID,
@@ -21,12 +22,12 @@ export class CreateRoomDto {
   @ApiProperty({ description: `Room's privacy`, nullable: false })
   isPrivate: boolean;
 
-  @IsArray()
   @ApiProperty({
     description: 'Array of users invited to the room',
     nullable: false,
   })
-  @IsUUID(undefined, { each: true })
+  @IsArray()
+  @IsEmail({}, { each: true })
   invitedUsers: string[];
 
   @IsString()
