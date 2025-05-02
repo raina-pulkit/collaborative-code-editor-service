@@ -24,4 +24,6 @@ export const configSchema = Joi.object({
   DB_SCHEMA: Joi.string().required(),
   DB_RETRY_ATTEMPTS: Joi.number().default(10),
   DB_RETRY_DELAY: Joi.number().default(3000),
+  SMTP_EMAIL: Joi.string().email().required(),
+  SMTP_PASS: Joi.string().required(),
 });
