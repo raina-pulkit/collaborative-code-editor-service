@@ -4,6 +4,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TerminusModule } from '@nestjs/terminus';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { configSchema } from 'config/config-schema';
+import { MailModule } from 'modules/mail/mail.module';
+import { QuestionModule } from 'modules/question/question.module';
 import { getTypeormOptions } from '../ormconfig';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,7 +13,6 @@ import { GithubAuthController } from './modules/github-auth/github-auth.controll
 import { GithubAuthModule } from './modules/github-auth/github-auth.module';
 import { GithubAuthService } from './modules/github-auth/github-auth.service';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
-import { QuestionModule } from './modules/question/question.module';
 import { RequestModule } from './modules/request/request.module';
 import { RoomModule } from './modules/room/room.module';
 import { SocketModule } from './modules/socket/socket.module';
@@ -43,6 +44,7 @@ import { UserModule } from './modules/user/user.module';
     SocketModule,
     RoomModule,
     QuestionModule,
+    MailModule,
   ],
   controllers: [AppController, GithubAuthController],
   providers: [AppService, GithubAuthService],
