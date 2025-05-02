@@ -18,8 +18,8 @@ export class RoomService {
 
   async create(createRoomDto: CreateRoomDto): Promise<Room> {
     const invitedUsers = await Promise.allSettled(
-      createRoomDto.invitedUsers.map(async uuid =>
-        this.userRepository.findOne({ where: { id: uuid } }),
+      createRoomDto.invitedUsers.map(async email =>
+        this.userRepository.findOne({ where: { email } }),
       ),
     );
 
