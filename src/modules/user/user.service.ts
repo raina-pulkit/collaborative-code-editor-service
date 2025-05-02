@@ -73,7 +73,7 @@ export class UserService {
    */
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     const userExists = await this.userRepository.findOne({
-      where: { id: id ?? updateUserDto.id },
+      where: { githubId: +id },
     });
 
     if (!userExists) {
@@ -84,9 +84,14 @@ export class UserService {
       throw new BadRequestException('User is deleted');
     }
 
+    const filteredUpdateDto = Object.fromEntries(
+      Object.entries(updateUserDto).filter(([_, value]) => value !== undefined),
+    );
+
     return this.userRepository.save({
       ...userExists,
-      ...updateUserDto,
+      ...filteredUpdateDto,
+      id: userExists.id, // Ensure PK is preserved
     });
   }
 
