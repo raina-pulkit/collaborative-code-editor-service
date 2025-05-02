@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateQuestionDto } from './dto/question.dto';
@@ -11,16 +11,32 @@ export class QuestionService {
     private questionRepo: Repository<Question>,
   ) {}
 
-  async createQuestion(dto: CreateQuestionDto): Promise<Question> {
+  async createQuestion(dto: CreateQuestionDto): Promise<{ data: Question }> {
+    if (!dto.title) {
+      throw new BadRequestException('Title is required');
+    }
+    if (!dto.description) {
+      throw new BadRequestException('Description is required');
+    }
+    if (!dto.difficulty) {
+      throw new BadRequestException('Difficulty is required');
+    }
+
     const question = this.questionRepo.create({
       ...dto,
       isCustom: dto.isCustom ?? false,
     });
-    return this.questionRepo.save(question);
+
+    const savedQuestion = await this.questionRepo.save(question);
+    return { data: savedQuestion };
   }
 
-  async getAllQuestions(): Promise<Question[]> {
-    return this.questionRepo.find({ order: { createdAt: 'DESC' } });
+  async getAllQuestions(): Promise<{ data: Question[] }> {
+    const questions = await this.questionRepo.find({
+      order: { createdAt: 'DESC' },
+    });
+
+    return { data: questions };
   }
 
   async bulkCreateQuestions(rawData: any[]): Promise<Question[]> {

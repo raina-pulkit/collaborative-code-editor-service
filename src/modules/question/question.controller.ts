@@ -16,7 +16,7 @@ export class QuestionController {
     type: Question,
   })
   @ApiOperation({ summary: 'Create a new question' })
-  async create(@Body() dto: CreateQuestionDto): Promise<Question> {
+  async create(@Body() dto: CreateQuestionDto): Promise<{ data: Question }> {
     dto.isCustom = true;
     return this.questionService.createQuestion(dto);
   }
@@ -27,7 +27,7 @@ export class QuestionController {
     type: [Question],
   })
   @ApiOperation({ summary: 'Get all questions' })
-  async getAll(): Promise<Question[]> {
+  async getAll(): Promise<{ data: Question[] }> {
     return this.questionService.getAllQuestions();
   }
 }

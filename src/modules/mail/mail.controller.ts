@@ -20,8 +20,6 @@ export class MailController {
       roomId: string;
     },
   ): Promise<{ message: string; failedEmails?: string[] }> {
-    console.log('Received invite request:', body);
-
     const { interviewees, interviewers, roomId } = body;
     const allEmails = [...interviewees, ...interviewers];
 
