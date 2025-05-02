@@ -37,7 +37,9 @@ async function bootstrap(): Promise<void> {
   writeFileSync('./swagger.json', JSON.stringify(document));
   SwaggerModule.setup('api', app, document);
 
-  app.enableCors();
+  app.enableCors({
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  });
   await app.init();
   await app.listen(
     configService.get<number>('PORT', { infer: true }) ?? 3000,
