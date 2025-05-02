@@ -37,8 +37,8 @@ export class UserController {
 
   @Get(':id')
   @ApiOkResponse({ description: 'Successfully fetched a user', type: User })
-  findOne(@Param('id', parameterValidator()) id: string): Promise<User> {
-    return this.userService.findOneByUuid(id);
+  findOne(@Param('id', parameterValidator()) id: number): Promise<User> {
+    return this.userService.findOneById(id);
   }
 
   @Put(':id')

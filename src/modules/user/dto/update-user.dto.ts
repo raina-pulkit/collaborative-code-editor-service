@@ -13,8 +13,9 @@ import { CreateUserDto } from './create-user.dto';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsUUID()
+  @IsOptional()
   @ApiProperty({ description: 'The unique identifier of the user' })
-  id: string;
+  id?: string;
 
   @IsString()
   @IsOptional()
